@@ -1,14 +1,10 @@
 class Vertice:
     # Vertice del grafo
-    def __init__(self, l):
-        self.label = l
-        self.in_archi = 0
-        self.out_archi = 0
-
-class Arco:
-    #Arco del grafo
-    def __init__(self, e):
-        self.etichetta = e
+    def __init__(self, label):
+        self.label = label
+    
+    def __hash__(self):
+        return hash(self.label)
 
 class Grafo:
     #composto grafo

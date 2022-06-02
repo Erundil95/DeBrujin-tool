@@ -1,72 +1,38 @@
 from Bio import SeqIO
 import elem
+import sys
 
 def read_input(path):
+    """Relative read of fasta file within project"""
     reads = []
     # path = Path(__file__) / "../fa-test.fa"        
     with path.open() as f:
         for record in SeqIO.parse(f, 'fasta'):
-            reads.append(str(record.seq))
-
+            reads.append(str(record.seq))       #maybe add strip to avoid blank spaces
     return reads
 
-def create_db_graph(reads, k):
+def splice(read, k):
+    """splice strings into k-mers"""
+    kmer = []
+    for elem in read:
+        for i in range(0, len(elem) - (k - 1)):
+            kmer.append(elem[i : i + k])
+    return kmer
 
-    archi = dict()
-    vertici = dict()
+def create_db_graph(kmers, k):
+    archi = {}      
+    vertici = {}         
 
-    for read in reads:
-        i = 0
-        while i+k < len(read):     # Caso in cui la read é < lunga di K?
-            r1 = read[i: i+k]
-            r2 = read[i+1 : i+k+1]
-            if r1 in archi.keys():
-                vertici[r1].out_archi += 1
-                archi[r1] += [elem.Arco(r2)]
-            else:
-                vertici[r1] = elem.Vertice(r1)
-                vertici[r1].out_archi += 1     #might wanna move this one out of the if 
-                archi[r1] = [elem.Arco(r2)]
-            
-            if r2 in archi.keys():
-                vertici[r2].in_archi += 1
-            else:
-                vertici[r2] = elem.Vertice(r2)
-                vertici[r2].in_archi += 1
-                archi[r2] = []
-            i += 1  
-    return (vertici, archi)
+    for kmer in kmers:
+        kmer_L, kmer_R = kmer[:-1], kmer[1:]                         #divido in k-1 mers
+        vertice_L, vertice_R = None, None
+        if kmer_L in vertici:                                        #per evitare vertici duplicati ne si controllo l'esistenza
+            vertice_L = vertici[kmer_L]
+        else:
+            vertice_L = vertici[kmer_L] = elem.Vertice(kmer_L)      #maybe dumb this one down into two commands
 
-def output_contigs(g):
-    """ Perform searching for Eulerian path in the graph to output genome assembly"""
-    V = g[0]
-    E = g[1]
-    # Pick starting node (the vertex with zero in degree)
-    start = list(V.keys())
-    for k in V.keys():
-        if V[k].in_archi < V[start].in_archi:
-            start = k
-
-    contig = start
-    current = start
-    while len(E[current]) > 0:
-        # Pick the next node to be traversed (for now, at random)
-        next = E[current][0]
-        del E[current][0]
-        contig += next.label[-1]
-        current = next.label
-
-    return contig  
-    
-def print_graph(g):
-    """ Print the information in the graph to be (somewhat) presentable """
-    V = g[0]
-    E = g[1]
-    for k in V.keys():
-        print("name: ", V[k].label, ". in_archi: ", V[k].in_archi, ". out_archi: ", V[k].out_archi)
-        print("Edges: ")
-        for e in E[k]:
-            print(e.label)
-        print(" ")
-
-    
+        if kmer_R in vertici:          
+            vertice_R = vertici[kmer_R]
+        else:
+            vertice_R = vertici[kmer_R] = elem.Vertice(kmer_R)
+        archi.setdefault(kmer_L, []).append(kmer_R)                  #creazione arco tra i due k-1 mer
