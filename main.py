@@ -7,12 +7,13 @@ import graphtest
 path = Path(__file__) / "../fa-test.fa"   
 
 read = utils.read_input(path)
+print(read)
 kmer = utils.splice(utils.read_input(path), 4)
+print(kmer)
 
 
 
-
-db = graphtest.DeBruijnGraph(read, 8)
+db = graphtest.DeBruijnGraph(read, 4)
 # print(db.hasEulerianPath())
 # print(db.eulerianPath())
 # print(dir(iter(db.G)))

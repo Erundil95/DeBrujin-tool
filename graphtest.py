@@ -39,6 +39,7 @@ class DeBruijnGraph:
         self.nodes = {} # maps k-1-mers to Node objects
         for st in strIter:
             for kmer, km1L, km1R in self.chop(st, k):
+                print(kmer)
                 nodeL, nodeR = None, None
                 if km1L in self.nodes:
                     nodeL = self.nodes[km1L]
@@ -50,6 +51,9 @@ class DeBruijnGraph:
                     nodeR = self.nodes[km1R] = self.Node(km1R)
                 nodeL.nout += 1
                 nodeR.nin += 1
+                print("nodeL: " + nodeL.km1mer + " in: " + str(nodeL.nin) + " out: " + str(nodeL.nout))
+                print("nodeR: " + nodeR.km1mer + " in: " + str(nodeR.nin) + " out: " + str(nodeR.nout))
+
                 self.G.setdefault(nodeL, []).append(nodeR)
         # Iterate through nodes and tally how many are balanced,
         # semi-balanced, or neither
@@ -101,14 +105,15 @@ class DeBruijnGraph:
         # graph g has an Eulerian cycle
         tour = []
         src = iter(g.keys()).__next__()
-        print("HEAD: ")
-        print(self.head.__hash__) # pick arbitrary starting node
-        print("SRC: ")
-        print(g[src].pop)
+        # print("HEAD: ")
+        # print(self.head) # pick arbitrary starting node
+        # print("SRC: ")
+        # print(g[src].pop)
         
         def __visit(n):
             while len(g[n]) > 0:
                 dst = g[n].pop()
+                # print(dst)
                 __visit(dst)
             tour.append(n)
         
@@ -117,7 +122,6 @@ class DeBruijnGraph:
             
         if self.hasEulerianPath():
             # Adjust node list so that it starts at head and ends at tail
-            print(map(str, tour), str(self.head))
             sti = tour.index(self.head)
             tour = tour[sti:] + tour[:sti]
         
@@ -135,7 +139,7 @@ class DeBruijnGraph:
             lab = node.km1mer
             dotFh.write("  %s [label=\"%s\"] ;\n" % (lab, lab))
         for src, dsts in iter(self.G.items()):
-            print(dsts)
+            # print(dsts)
             srclab = src.km1mer
             if weights:
                 weightmap = {}

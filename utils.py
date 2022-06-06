@@ -1,5 +1,5 @@
 from Bio import SeqIO
-import elem
+import graph
 import sys
 
 def read_input(path):
