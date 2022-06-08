@@ -13,7 +13,7 @@ print(kmer)
 
 
 
-db = graphtest.DeBruijnGraph(read, 4)
+db = graphtest.DeBruijnGraph(read, 5)
 # print(db.hasEulerianPath())
 # print(db.eulerianPath())
 # print(dir(iter(db.G)))

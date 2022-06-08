@@ -53,7 +53,8 @@ class DeBruijnGraph:
                 nodeR.nin += 1
                 print("nodeL: " + nodeL.km1mer + " in: " + str(nodeL.nin) + " out: " + str(nodeL.nout))
                 print("nodeR: " + nodeR.km1mer + " in: " + str(nodeR.nin) + " out: " + str(nodeR.nout))
-
+                
+                self.G.setdefault(nodeL, [])   #TODO: find a way to save weight of edge as well
                 self.G.setdefault(nodeL, []).append(nodeR)
         # Iterate through nodes and tally how many are balanced,
         # semi-balanced, or neither
@@ -95,7 +96,7 @@ class DeBruijnGraph:
     
     def eulerianPath(self):
         """ Find and return Eulerian path or cycle (as appropriate) """
-        assert self.isEulerian()
+        #assert self.isEulerian()
         g = self.G
         if self.hasEulerianPath():
             g = g.copy()
@@ -105,11 +106,7 @@ class DeBruijnGraph:
         # graph g has an Eulerian cycle
         tour = []
         src = iter(g.keys()).__next__()
-        # print("HEAD: ")
-        # print(self.head) # pick arbitrary starting node
-        # print("SRC: ")
-        # print(g[src].pop)
-        
+        print(g)
         def __visit(n):
             while len(g[n]) > 0:
                 dst = g[n].pop()
