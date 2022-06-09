@@ -38,8 +38,8 @@ class DeBruijnGraph:
         self.G = {}     # multimap from nodes to neighbors
         self.nodes = {} # maps k-1-mers to Node objects
         for st in strIter:
-            for kmer, km1L, km1R in self.chop(st, k):
-                print(kmer)
+            for kmer, km1L, km1R in list(dict.fromkeys(self.chop(st, k))):
+                print(list(dict.fromkeys(self.chop(st, k))))
                 nodeL, nodeR = None, None
                 if km1L in self.nodes:
                     nodeL = self.nodes[km1L]
@@ -53,9 +53,9 @@ class DeBruijnGraph:
                 nodeR.nin += 1
                 print("nodeL: " + nodeL.km1mer + " in: " + str(nodeL.nin) + " out: " + str(nodeL.nout))
                 print("nodeR: " + nodeR.km1mer + " in: " + str(nodeR.nin) + " out: " + str(nodeR.nout))
-                
-                self.G.setdefault(nodeL, [])   #TODO: find a way to save weight of edge as well
+            
                 self.G.setdefault(nodeL, []).append(nodeR)
+                print()
         # Iterate through nodes and tally how many are balanced,
         # semi-balanced, or neither
         self.nsemi, self.nbal, self.nneither = 0, 0, 0
@@ -106,7 +106,6 @@ class DeBruijnGraph:
         # graph g has an Eulerian cycle
         tour = []
         src = iter(g.keys()).__next__()
-        print(g)
         def __visit(n):
             while len(g[n]) > 0:
                 dst = g[n].pop()

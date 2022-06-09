@@ -1,25 +1,5 @@
 digraph "Graph" {
   bgcolor="transparent";
-  ATCG [label="ATCG"] ;
-  TCGA [label="TCGA"] ;
-  CGAT [label="CGAT"] ;
-  GATA [label="GATA"] ;
-  ATAG [label="ATAG"] ;
-  TAGA [label="TAGA"] ;
-  AGAT [label="AGAT"] ;
-  GATG [label="GATG"] ;
-  ATGG [label="ATGG"] ;
-  TGGA [label="TGGA"] ;
-  GGAA [label="GGAA"] ;
-  ATCG -> TCGA [label="1"] ;
-  TCGA -> CGAT [label="1"] ;
-  CGAT -> GATA [label="1"] ;
-  GATA -> ATAG [label="1"] ;
-  ATAG -> TAGA [label="1"] ;
-  TAGA -> AGAT [label="1"] ;
-  AGAT -> GATG [label="2"] ;
-  GATG -> ATGG [label="2"] ;
-  ATGG -> TGGA [label="1"] ;
-  TGGA -> GGAA [label="1"] ;
-  GGAA -> GAAG [label="1"] ;
+  AG -> GA [label="2"] ;
+  GA -> AT [label="2"] ;
 }
