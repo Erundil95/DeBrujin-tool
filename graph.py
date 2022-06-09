@@ -21,6 +21,13 @@ class DB_Graph:
         def __hash__(self):
             return hash(self.label)
 
+    class Arco:
+
+        def __init__(self, to_node):
+            # self.from_node = from_node
+            self.to_node = to_node
+            self.weight = 0
+
 
     def __init__(self, kmers, k):    #TODO: is this even needed?
         self.archi = {}      
@@ -39,7 +46,16 @@ class DB_Graph:
                 vertice_R = self.vertici[kmer_R]
             else:
                 vertice_R = self.vertici[kmer_R] = graph.Vertice(kmer_R)
-            self.archi.setdefault(kmer_L, []).append(kmer_R)                  #creazione arco tra i due k-1 mer
+            self.archi.setdefault(vertice_L, []).append(vertice_R)  
+
+            #change kmer to vertice
+            kl = graph.Arco(kmer_L)
+            if(self.archi.setdefault(kl, []) == []):
+                self.archi.setdefault(kmer_L, []).append(graph.Arco(kmer_R))
+            else
+                a = graph.Arco(kmer_R, )
+                self.archi.setdefault(kmer_R, )
+                                #creazione arco tra i due k-1 mer
         self.balanceCount()
  
     def balanceCount(self):
