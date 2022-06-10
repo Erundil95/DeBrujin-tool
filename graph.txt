@@ -1,5 +1,0 @@
-digraph "Graph" {
-  bgcolor="transparent";
-  AG -> GA [label="2"] ;
-  GA -> AT [label="2"] ;
-}
